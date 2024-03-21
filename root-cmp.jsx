@@ -6,7 +6,7 @@ import { AppHeader } from "./cmps/AppHeader.jsx";
 
 import { HomePage } from "./pages/HomePage.jsx";
 import { AboutUs } from "./pages/AboutUs.jsx";
-// import { TodoApp } from "./pages/TodoIndex.jsx";
+import { TodoIndex } from "./pages/TodoIndex.jsx";
 // import { store } from "./store/store.js";
 
 export class App extends React.Component {
@@ -18,9 +18,9 @@ export class App extends React.Component {
           <AppHeader />
           <main className="main-layout">
             <Routes>
-              <Route element={<HomePage />} path="/" />
-              <Route element={<AboutUs />} path="/about" />
-              {/* <Route element={<TodoApp />} path="/todo" /> */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/todo" element={<TodoApp />} />
             </Routes>
           </main>
         </section>

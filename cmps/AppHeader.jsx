@@ -8,7 +8,7 @@ export function AppHeader() {
         <nav className="app-nav">
           <NavLink to="/">Home</NavLink>
           <NavLink to="/about">About</NavLink>
-          <NavLink to="/todo">todo</NavLink>
+          <NavLink to="/todo">Todo</NavLink>
           {/* <a onClick={onToggleCart} href="#">
             🛒 Cart
           </a> */}
