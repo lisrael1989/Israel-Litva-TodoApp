@@ -42,7 +42,7 @@ function save(todo) {
 
 function getEmptyTodo() {
   return {
-    id: "",
+    // id: "",
     txt: "work hard",
     isDone: false,
   };

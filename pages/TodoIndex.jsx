@@ -1,30 +1,37 @@
 const { useState, useEffect } = React;
-// const { useSelector, useDispatch } = ReactRedux;
 
 import { todoService } from "../services/todo.service.js";
 import { showSuccessMsg, showErrorMsg } from "../services/event-bus.service.js";
-// import { loadCars, removeCar, saveCar } from "../store/actions/car.actions.js";
-// import { ADD_CAR_TO_CART } from "../store/store.js";
+import { TodoList } from "../cmps/TodoList.jsx";
 
 export function TodoIndex() {
   const [todos, setTodos] = useState([]);
   const [filterBy, setFilterBy] = useState(todoService.getDefaultFilter());
-  // const dispatch = useDispatch();
-  // const todos = useSelector((storeState) => storeState.todos);
 
   useEffect(() => {
-    loadTodos(filterBy).catch((err) => {
-      showErrorMsg("Cannot load todos!");
-    });
+    loadTodos();
   }, [filterBy]);
 
+  function loadTodos() {
+    return todoService
+      .query(filterBy)
+      .then(setTodos)
+      .catch((err) => {
+        // console.log(' Cannot load todos', err)
+        showErrorMsg(" Cannot load todos");
+      });
+  }
   function onSetFilter(filterBy) {
     setFilterBy((prevFilter) => ({ ...prevFilter, ...filterBy }));
   }
 
   function onRemoveTodo(todoId) {
-    removeTodo(todoId)
+    todoService
+      .remove(todoId)
       .then(() => {
+        setTodos((prevTodos) =>
+          prevTodos.filter((todo) => todo._id !== todoId)
+        );
         showSuccessMsg("Todo removed");
       })
       .catch((err) => {
@@ -34,67 +41,51 @@ export function TodoIndex() {
 
   function onAddTodo() {
     const todoToSave = todoService.getEmptyTodo();
-
-    saveTodo(todoToSave)
+    todoToSave.txt = prompt("ADD todo ");
+    todoService
+      .save(todoToSave)
       .then((saveTodo) => {
-        showSuccessMsg(`Todo added (id: ${saveTodo._id})`);
+        setTodos((prevTodos) => [saveTodo, ...prevTodos]);
+        showSuccessMsg(`Todo added`);
       })
       .catch((err) => {
         showErrorMsg("Cannot add todo");
       });
   }
   function onEditTodo(todo) {
-    const txt = +prompt("new todo? ");
+    const txt = prompt("new todo? ");
     const todoToSave = { ...todo, txt };
 
-    saveTodo(todoToSave)
-      .then((todoToSave) => {
-        showSuccessMsg(`Car updated to price: $${todoToSave.txt}`);
+    todoService
+      .save(todoToSave)
+      .then((saveTodo) => {
+        setTodos((prevTodos) =>
+          prevTodos.map((todo) => (todo._id === saveTodo._id ? saveTodo : todo))
+        );
+        showSuccessMsg(`todo updated to price: $${todoToSave.txt}`);
       })
       .catch((err) => {
-        showErrorMsg("Cannot update car");
+        showErrorMsg("Cannot update todo");
       });
   }
 
-  // function addToCart(car) {
-  //   console.log(`Adding ${car.vendor} to Cart`);
-  //   // TODO: use dispatch
-  //   dispatch({ type: ADD_CAR_TO_CART, car });
-  //   showSuccessMsg("Added to Cart");
-  // }
-
   return (
-    <div>
+    <section className="todo-index">
+      {!todos.length && <div>No todos to show...</div>}
+
       <h3>TODO App</h3>
-      <main>
-        <button className="add-btn" onClick={onAddTodo}>
-          Add todo ⌨️
-        </button>
-        <TodoFilter filterBy={filterBy} onSetFilter={onSetFilter} />
-        <ul className="todo-list">
-          {todos.map((todo) => (
-            <li className="todo-preview" key={todo._id}>
-              <div>
-                <button
-                  onClick={() => {
-                    onRemoveTodo(car._id);
-                  }}
-                >
-                  x
-                </button>
-                <button
-                  onClick={() => {
-                    onEditTodo(car);
-                  }}
-                >
-                  Edit
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <hr />
-      </main>
-    </div>
+
+      <button className="add-btn" onClick={onAddTodo}>
+        Add todo ⌨️
+      </button>
+
+      {todos && (
+        <TodoList
+          todos={todos}
+          onRemoveTodo={onRemoveTodo}
+          onEditTodo={onEditTodo}
+        />
+      )}
+    </section>
   );
 }
