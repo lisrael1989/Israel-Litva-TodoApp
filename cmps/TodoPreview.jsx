@@ -1,15 +1,16 @@
 export function TodoPreview({ todo, onRemoveTodo, onEditTodo }) {
   return (
     <section className="todo-preview">
-      <button className="btn " onClick={() => onRemoveTodo(todo._id)}>
-        x
-      </button>
+      <button
+        className="btn remove-btn fa-solid fa-trash "
+        title="Remove"
+        onClick={() => onRemoveTodo(todo._id)}
+      ></button>
       <button
         className="btn edit-btn fa-solid fa-pen-to-square"
+        title="Edit"
         onClick={() => onEditTodo(todo)}
-      >
-        Edit
-      </button>
+      ></button>
       <span>{todo.txt}</span>
     </section>
   );

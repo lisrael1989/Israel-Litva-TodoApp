@@ -3,6 +3,8 @@ const { useState, useEffect } = React;
 import { todoService } from "../services/todo.service.js";
 import { showSuccessMsg, showErrorMsg } from "../services/event-bus.service.js";
 import { TodoList } from "../cmps/TodoList.jsx";
+// import { user } from "../cmps/user.jsx";
+import { UserMsg } from "../cmps/UserMsg.jsx";
 
 export function TodoIndex() {
   const [todos, setTodos] = useState([]);
@@ -46,7 +48,8 @@ export function TodoIndex() {
       .save(todoToSave)
       .then((saveTodo) => {
         setTodos((prevTodos) => [saveTodo, ...prevTodos]);
-        showSuccessMsg(`Todo added`);
+        console.log(saveTodo);
+        showSuccessMsg("Todo added");
       })
       .catch((err) => {
         showErrorMsg("Cannot add todo");
@@ -62,7 +65,7 @@ export function TodoIndex() {
         setTodos((prevTodos) =>
           prevTodos.map((todo) => (todo._id === saveTodo._id ? saveTodo : todo))
         );
-        showSuccessMsg(`todo updated to price: $${todoToSave.txt}`);
+        showSuccessMsg(`todo updated `);
       })
       .catch((err) => {
         showErrorMsg("Cannot update todo");
@@ -75,7 +78,7 @@ export function TodoIndex() {
 
       <h3>TODO App</h3>
 
-      <button className="add-btn" onClick={onAddTodo}>
+      <button className="add-btn" title="Add todo" onClick={onAddTodo}>
         Add todo ⌨️
       </button>
 
@@ -86,6 +89,7 @@ export function TodoIndex() {
           onEditTodo={onEditTodo}
         />
       )}
+      <UserMsg />
     </section>
   );
 }
