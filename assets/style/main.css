@@ -11,6 +11,7 @@
 /* Components */
 @import "cmps/AppHeader.css";
 @import "cmps/UserMsg.css";
+@import "cmps/TodoPreview.css";
 
 .app {
   display: flex;

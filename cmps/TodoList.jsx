@@ -1,6 +1,6 @@
 import { TodoPreview } from "./TodoPreview.jsx";
 
-export function TodoList({ todos, onRemoveTodo, onEditTodo }) {
+export function TodoList({ todos, onRemoveTodo, onEditTodo, onUpdateTodo }) {
   return (
     <ul className="todo-list" style={{ listStyleType: "none", padding: 0 }}>
       {todos.map((todo) => (
@@ -9,6 +9,7 @@ export function TodoList({ todos, onRemoveTodo, onEditTodo }) {
             todo={todo}
             onRemoveTodo={onRemoveTodo}
             onEditTodo={onEditTodo}
+            onUpdateTodo={onUpdateTodo}
           />
         </li>
       ))}

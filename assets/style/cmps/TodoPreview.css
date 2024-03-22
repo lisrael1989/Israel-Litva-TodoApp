@@ -1,0 +1,8 @@
+.todo-preview .is-done {
+  text-decoration: line-through blue 2px;
+}
+
+.todo-preview span {
+  text-transform: uppercase;
+  font-family: "Courier New", Courier, monospace;
+}

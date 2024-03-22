@@ -19,10 +19,22 @@ export function TodoIndex() {
       .query(filterBy)
       .then(setTodos)
       .catch((err) => {
-        // console.log(' Cannot load todos', err)
+        console.log(" Cannot load todos", err);
         showErrorMsg(" Cannot load todos");
       });
   }
+
+  const onUpdateTodo = (updatedTodo) => {
+    todoService
+      .save(updatedTodo)
+      .then((savedTodo) => {
+        setTodos(
+          todos.map((todo) => (todo._id === savedTodo._id ? savedTodo : todo))
+        );
+      })
+      .catch((err) => console.error("Cannot update todo", err));
+  };
+
   function onSetFilter(filterBy) {
     setFilterBy((prevFilter) => ({ ...prevFilter, ...filterBy }));
   }
@@ -74,7 +86,7 @@ export function TodoIndex() {
 
   return (
     <section className="todo-index">
-      {!todos.length && <div>No todos to show...</div>}
+      {!todos.length && <div>You dont have TODOS...</div>}
 
       <h3>TODO App</h3>
 
@@ -87,6 +99,7 @@ export function TodoIndex() {
           todos={todos}
           onRemoveTodo={onRemoveTodo}
           onEditTodo={onEditTodo}
+          onUpdateTodo={onUpdateTodo}
         />
       )}
       <UserMsg />

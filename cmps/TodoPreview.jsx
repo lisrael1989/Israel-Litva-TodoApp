@@ -1,4 +1,10 @@
-export function TodoPreview({ todo, onRemoveTodo, onEditTodo }) {
+export function TodoPreview({ todo, onRemoveTodo, onEditTodo, onUpdateTodo }) {
+  const handleCheckboxChange = () => {
+    const updatedTodo = { ...todo, isDone: !todo.isDone };
+
+    onUpdateTodo(updatedTodo);
+  };
+
   return (
     <section className="todo-preview">
       <button
@@ -11,14 +17,14 @@ export function TodoPreview({ todo, onRemoveTodo, onEditTodo }) {
         title="Edit"
         onClick={() => onEditTodo(todo)}
       ></button>
-      <span>{todo.txt}</span>
+      <label>
+        <input
+          type="checkbox"
+          checked={todo.isDone}
+          onChange={handleCheckboxChange}
+        />
+        <span className={todo.isDone ? "is-done" : ""}>{todo.txt}</span>
+      </label>
     </section>
   );
-}
-
-{
-  /* <label >
-<input type="checkbox" checked={todo.checked} onChange={() => handleCheckboxChange(index)}/>
-<span className="label">{todo.txt }</span>
-</label> */
 }

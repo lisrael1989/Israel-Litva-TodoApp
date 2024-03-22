@@ -43,5 +43,5 @@ object {
 }
 
 a.active {
-  text-decoration: underline;
+  text-decoration: underline black;
 }
