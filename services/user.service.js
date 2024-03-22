@@ -9,8 +9,8 @@ export const userService = {
   signup,
   getById,
   getLoggedinUser,
-  updateScore,
   getEmptyCredentials,
+  // addActivity,
 };
 
 function getById(userId) {
@@ -73,6 +73,9 @@ function getEmptyCredentials() {
   };
 }
 
-// Test Data
-// userService.signup({username: 'bobo', password: 'bobo', fullname: 'Bobo McPopo'})
-// userService.login({username: 'bobo', password: 'bobo'})
+userService.signup({
+  username: "muki",
+  password: "muki1",
+  fullname: "muki ja",
+});
+userService.login({ username: "muki", password: "muki1" });

@@ -1,0 +1,9 @@
+.app-footer {
+  font-weight: 700;
+  color: var(--clr1);
+  font-size: 1.25em;
+}
+
+h1 {
+  color: white;
+}

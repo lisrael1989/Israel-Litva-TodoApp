@@ -3,7 +3,7 @@ const { useState, useEffect } = React;
 import { todoService } from "../services/todo.service.js";
 import { showSuccessMsg, showErrorMsg } from "../services/event-bus.service.js";
 import { TodoList } from "../cmps/TodoList.jsx";
-// import { user } from "../cmps/user.jsx";
+import { user } from "../cmps/user.jsx";
 import { UserMsg } from "../cmps/UserMsg.jsx";
 import { TodoFilter } from "../cmps/TodoFilter.jsx";
 
