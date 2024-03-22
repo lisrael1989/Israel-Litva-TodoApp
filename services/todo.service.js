@@ -17,9 +17,24 @@ export const todoService = {
 
 function query(filterBy = {}) {
   return storageService.query(STORAGE_KEY).then((todos) => {
-    if (!filterBy.txt) filterBy.txt = "";
-    const regExp = new RegExp(filterBy.txt, "i");
-    return todos.filter((todo) => regExp.test(todo.txt));
+    if (filterBy.txt) {
+      const regExp = new RegExp(filterBy.txt, "i");
+      todos = todos.filter((todo) => regExp.test(todo.txt));
+    }
+
+    if (filterBy.isDone !== null) {
+      switch (filterBy.isDone) {
+        case true:
+          todos = todos.filter((todo) => todo.isDone);
+          break;
+
+        case false:
+          todos = todos.filter((todo) => !todo.isDone);
+          break;
+      }
+    }
+
+    return todos;
   });
 }
 

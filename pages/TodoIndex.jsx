@@ -5,6 +5,7 @@ import { showSuccessMsg, showErrorMsg } from "../services/event-bus.service.js";
 import { TodoList } from "../cmps/TodoList.jsx";
 // import { user } from "../cmps/user.jsx";
 import { UserMsg } from "../cmps/UserMsg.jsx";
+import { TodoFilter } from "../cmps/TodoFilter.jsx";
 
 export function TodoIndex() {
   const [todos, setTodos] = useState([]);
@@ -35,8 +36,9 @@ export function TodoIndex() {
       .catch((err) => console.error("Cannot update todo", err));
   };
 
-  function onSetFilter(filterBy) {
-    setFilterBy((prevFilter) => ({ ...prevFilter, ...filterBy }));
+  function onSetFilter(newFilterBy) {
+    // Spread the newFilterBy over the previous state to merge them
+    setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...newFilterBy }));
   }
 
   function onRemoveTodo(todoId) {
@@ -88,8 +90,7 @@ export function TodoIndex() {
     <section className="todo-index">
       {!todos.length && <div>You dont have TODOS...</div>}
 
-      <h3>TODO App</h3>
-
+      <TodoFilter onSetFilter={onSetFilter} filterBy={filterBy} />
       <button className="add-btn" title="Add todo" onClick={onAddTodo}>
         Add todo ⌨️
       </button>
