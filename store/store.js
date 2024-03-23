@@ -7,7 +7,7 @@ const { createStore, compose } = Redux;
 export const SET_TODOS = "SET_TODOS";
 export const REMOVE_TODO = "REMOVE_TODO";
 export const ADD_TODO = "ADD_TODO";
-// export const UPDATE_CAR = "UPDATE_CAR";
+export const UPDATE_TODO = "UPDATE_TODO";
 
 //* User
 export const SET_USER = "SET_USER";
@@ -32,6 +32,14 @@ export function appReducer(state = initialState, action = {}) {
       return {
         ...state,
         todos: [...state.todos, action.todo],
+      };
+
+    case UPDATE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((todo) =>
+          todo._id === action.todo._id ? action.todo : todo
+        ),
       };
 
     //* User

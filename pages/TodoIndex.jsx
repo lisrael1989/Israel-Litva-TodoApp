@@ -14,10 +14,10 @@ export function TodoIndex() {
   const todos = useSelector((storeState) => storeState.todos);
   const [filterBy, setFilterBy] = useState(todoService.getDefaultFilter());
 
-  console.log(filterBy);
-  console.log(todos);
+  // console.log(filterBy);
+  // console.log(todos);
   useEffect(() => {
-    console.log("test");
+    // console.log("test");
     actions.loadTodos(filterBy);
   }, [filterBy]);
 
@@ -26,7 +26,8 @@ export function TodoIndex() {
   }
 
   function onRemoveTodo(todoId) {
-    removeTodo(todoId)
+    actions
+      .removeTodo(todoId)
       .then(() => {
         showSuccessMsg("Todo removed");
       })
@@ -39,7 +40,8 @@ export function TodoIndex() {
     const todoToSave = todoService.getEmptyTodo();
     todoToSave.txt = prompt("ADD todo ");
 
-    saveTodo(todoToSave)
+    actions
+      .saveTodo(todoToSave)
       .then(() => {
         showSuccessMsg("Todo added");
       })
@@ -49,10 +51,11 @@ export function TodoIndex() {
   }
 
   function onEditTodo(todo) {
-    const txt = prompt("new todo? ");
+    const txt = prompt("new todo? ", todo.txt);
     const todoToSave = { ...todo, txt };
 
-    saveTodo(todoToSave)
+    actions
+      .saveTodo(todoToSave)
       .then(() => {
         showSuccessMsg(`todo updated `);
       })
@@ -61,16 +64,12 @@ export function TodoIndex() {
       });
   }
 
-  const onUpdateTodo = (updatedTodo) => {
-    todoService
-      .save(updatedTodo)
-      .then((savedTodo) => {
-        setTodos(
-          todos.map((todo) => (todo._id === savedTodo._id ? savedTodo : todo))
-        );
-      })
+  function onUpdateTodo(todo) {
+    const todoToSave = { ...todo, isDone: !todo.isDone };
+    actions
+      .saveTodo(todoToSave)
       .catch((err) => console.error("Cannot update todo", err));
-  };
+  }
 
   return (
     <section className="todo-index">
