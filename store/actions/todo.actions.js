@@ -1,10 +1,19 @@
 import { todoService } from "../../services/todo.service.js";
+import { userService } from "../../services/user.service.js";
 import { ADD_TODO, REMOVE_TODO, SET_TODOS, store } from "../store.js";
 
-export function loadTodos(filterBy) {
+export const actions = {
+  saveTodo,
+  removeTodo,
+  loadTodos,
+};
+
+function loadTodos(filterBy) {
+  console.log("inside load todos actions");
   return todoService
     .query(filterBy)
     .then((todos) => {
+      console.log({ todos });
       store.dispatch({ type: SET_TODOS, todos });
     })
     .catch((err) => {
@@ -13,7 +22,7 @@ export function loadTodos(filterBy) {
     });
 }
 
-export function removeTodo(todoId) {
+function removeTodo(todoId) {
   return todoService
     .remove(todoId)
     .then(() => {
@@ -25,7 +34,7 @@ export function removeTodo(todoId) {
     });
 }
 
-export function saveTodo(todo) {
+function saveTodo(todo) {
   const type = ADD_TODO;
   return todoService
     .save(todo)
