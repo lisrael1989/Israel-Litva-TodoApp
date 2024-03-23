@@ -1,53 +1,49 @@
 const { useState, useEffect } = React;
+const { useSelector } = ReactRedux;
 
 import { todoService } from "../services/todo.service.js";
 import { showSuccessMsg, showErrorMsg } from "../services/event-bus.service.js";
+
 import { TodoList } from "../cmps/TodoList.jsx";
-import { user } from "../cmps/user.jsx";
-import { UserMsg } from "../cmps/UserMsg.jsx";
 import { TodoFilter } from "../cmps/TodoFilter.jsx";
 
+import {
+  loadTodos222,
+  loadTodos,
+  removeTodo,
+  saveTodo,
+} from "../store/actions/todo.actions.js";
+import { UserMsg } from "../cmps/UserMsg.jsx";
+
 export function TodoIndex() {
-  const [todos, setTodos] = useState([]);
+  const todos = useSelector((storeState) => storeState.todos);
   const [filterBy, setFilterBy] = useState(todoService.getDefaultFilter());
 
+  console.log(filterBy);
+  console.log(todos);
   useEffect(() => {
-    loadTodos();
-  }, [filterBy]);
+    console.log("test");
+    loadTodos({ txt: "", isDone: null });
+  }, []);
 
-  function loadTodos() {
-    return todoService
-      .query(filterBy)
-      .then(setTodos)
-      .catch((err) => {
-        console.log(" Cannot load todos", err);
-        showErrorMsg(" Cannot load todos");
-      });
+  return <div>123</div>;
+  function onSetFilter(filterBy) {
+    setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...filterBy }));
   }
 
-  const onUpdateTodo = (updatedTodo) => {
-    todoService
-      .save(updatedTodo)
-      .then((savedTodo) => {
-        setTodos(
-          todos.map((todo) => (todo._id === savedTodo._id ? savedTodo : todo))
-        );
-      })
-      .catch((err) => console.error("Cannot update todo", err));
-  };
-
-  function onSetFilter(newFilterBy) {
-    // Spread the newFilterBy over the previous state to merge them
-    setFilterBy((prevFilterBy) => ({ ...prevFilterBy, ...newFilterBy }));
-  }
+  // function loadTodos() {
+  //   return todoService
+  //     .query(filterBy)
+  //     .then(setTodos)
+  //     .catch((err) => {
+  //       console.log(" Cannot load todos", err);
+  //       showErrorMsg(" Cannot load todos");
+  //     });
+  // }
 
   function onRemoveTodo(todoId) {
-    todoService
-      .remove(todoId)
+    removeTodo(todoId)
       .then(() => {
-        setTodos((prevTodos) =>
-          prevTodos.filter((todo) => todo._id !== todoId)
-        );
         showSuccessMsg("Todo removed");
       })
       .catch((err) => {
@@ -58,33 +54,39 @@ export function TodoIndex() {
   function onAddTodo() {
     const todoToSave = todoService.getEmptyTodo();
     todoToSave.txt = prompt("ADD todo ");
-    todoService
-      .save(todoToSave)
-      .then((saveTodo) => {
-        setTodos((prevTodos) => [saveTodo, ...prevTodos]);
-        console.log(saveTodo);
+
+    saveTodo(todoToSave)
+      .then(() => {
         showSuccessMsg("Todo added");
       })
       .catch((err) => {
         showErrorMsg("Cannot add todo");
       });
   }
+
   function onEditTodo(todo) {
     const txt = prompt("new todo? ");
     const todoToSave = { ...todo, txt };
 
-    todoService
-      .save(todoToSave)
-      .then((saveTodo) => {
-        setTodos((prevTodos) =>
-          prevTodos.map((todo) => (todo._id === saveTodo._id ? saveTodo : todo))
-        );
+    saveTodo(todoToSave)
+      .then(() => {
         showSuccessMsg(`todo updated `);
       })
       .catch((err) => {
         showErrorMsg("Cannot update todo");
       });
   }
+
+  // const onUpdateTodo = (updatedTodo) => {
+  //   todoService
+  //     .save(updatedTodo)
+  //     .then((savedTodo) => {
+  //       setTodos(
+  //         todos.map((todo) => (todo._id === savedTodo._id ? savedTodo : todo))
+  //       );
+  //     })
+  //     .catch((err) => console.error("Cannot update todo", err));
+  // };
 
   return (
     <section className="todo-index">
@@ -100,7 +102,7 @@ export function TodoIndex() {
           todos={todos}
           onRemoveTodo={onRemoveTodo}
           onEditTodo={onEditTodo}
-          onUpdateTodo={onUpdateTodo}
+          // onUpdateTodo={onUpdateTodo}
         />
       )}
       <UserMsg />

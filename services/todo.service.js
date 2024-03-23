@@ -1,6 +1,6 @@
 import { storageService } from "./async-storage.service.js";
 import { utilService } from "./util.service.js";
-import { userService } from "./user.service.js";
+// import { userService } from "./user.service.js";
 
 const STORAGE_KEY = "todoDB";
 
@@ -16,6 +16,7 @@ export const todoService = {
 };
 
 function query(filterBy = {}) {
+  console.log("inside query");
   return storageService.query(STORAGE_KEY).then((todos) => {
     if (filterBy.txt) {
       const regExp = new RegExp(filterBy.txt, "i");
@@ -50,15 +51,13 @@ function save(todo) {
   if (todo._id) {
     return storageService.put(STORAGE_KEY, todo);
   } else {
-    /* todo.owner = userService.getLoggedinUser();*/
     return storageService.post(STORAGE_KEY, todo);
   }
 }
 
 function getEmptyTodo() {
   return {
-    // id: "",
-    txt: "work hard",
+    txt: "",
     isDone: false,
   };
 }

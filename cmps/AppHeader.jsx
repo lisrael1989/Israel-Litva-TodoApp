@@ -1,7 +1,5 @@
-const { Link, NavLink } = ReactRouterDOM;
-const { useState } = React;
-const { useSelector, useDispatch } = ReactRedux;
-const { useNavigate } = ReactRouter;
+const { NavLink } = ReactRouterDOM;
+const { useSelector } = ReactRedux;
 
 import { UserMsg } from "./UserMsg.jsx";
 import { LoginSignup } from "./LoginSignup.jsx";
@@ -10,9 +8,13 @@ import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js";
 import { logout } from "../store/actions/user.actions.js";
 
 export function AppHeader() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((storeState) => storeState.loggedInUser);
+  const todos = useSelector((storeState) => storeState.todos);
+
+  const doneCount = todos.filter((todo) => todo.isDone).length;
+  const totalCount = todos.length;
+  const donePercentage = totalCount > 0 ? (doneCount / totalCount) * 100 : 0;
+
   function onLogout() {
     logout()
       .then(() => {
@@ -30,6 +32,8 @@ export function AppHeader() {
 
   return (
     <header className="app-header full main-layout">
+      {/* <progress value={todos.isDone} max={todos.leanth} /> */}
+
       <section className="header-container">
         <h1>Todo App</h1>
         <nav className="app-nav">
@@ -50,6 +54,15 @@ export function AppHeader() {
           <LoginSignup />
         </section>
       )}
+      <div className="progress-container">
+        <span>Completion bar: </span>
+        <progress
+          className="progress-bar"
+          value={donePercentage}
+          max="100"
+        ></progress>
+        <span>{donePercentage.toFixed(0)}%</span>
+      </div>
       <UserMsg />
     </header>
   );

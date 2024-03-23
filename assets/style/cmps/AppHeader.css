@@ -9,6 +9,10 @@
   gap: 15px;
 }
 
+.progress-bar {
+  margin-left: 10px;
+}
+
 @media (max-width: 720px) {
   .app-header {
     color: var(--clr2bg);
